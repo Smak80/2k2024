@@ -1,0 +1,39 @@
+.header{
+    width: calc(100% - 16px);
+    padding: 20px 8px;
+    font-size: x-large;
+    font-weight: bold;
+    text-align: center;
+    background: linear-gradient(#BBBBBB, white, #BBBBBB);
+}
+
+body{
+    padding: 0;
+    margin: 0;
+}
+
+.menu{
+    width: 200px;
+    padding: 10px;
+    float: left;
+    background: linear-gradient(270deg, white, orange);
+}
+
+.content{
+    float: left;
+    padding: 10px 8px 10px 20px;
+    width: calc(100% - 291px);
+    border-left: 1px dashed #DDDDDD;
+}
+
+.footer{
+    clear: both;
+    background: linear-gradient(#DDDDDD 20%, white 65%, #DDDDDD);
+    padding: 20px 8px 10px 8px;
+    font-size: x-small;
+    text-align: right;
+}
+
+.center{
+    text-align: center;
+}
