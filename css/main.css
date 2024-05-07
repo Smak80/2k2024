@@ -16,14 +16,28 @@ body{
     width: 200px;
     padding: 10px;
     float: left;
+    border-right: 1px dashed #DDDDDD;
     background: linear-gradient(270deg, white, orange);
+}
+
+.menuitem{
+    width: calc(100% - 40px);
+    padding: 5px 10px;
+    margin: 10px;
+    background: linear-gradient(#FFFFFF40, #FF800040);
+    border: 1px solid orange;
+    text-align: center;
+}
+
+.menuitem>a{
+    text-decoration: none;
+    color: #444444;
 }
 
 .content{
     float: left;
     padding: 10px 8px 10px 20px;
-    width: calc(100% - 291px);
-    border-left: 1px dashed #DDDDDD;
+    width: calc(100% - 249px);
 }
 
 .footer{

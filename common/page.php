@@ -3,11 +3,14 @@
 namespace common;
 
 require_once "a_content.php";
+require_once "common/menu.php";
 
 class page
 {
     private $content;
+    private menu $menu;
     function __construct(a_content $content){
+        $this->menu = new menu();
         $this->content = $content;
         $this->prepare_page();
         $this->show_heading();
@@ -41,7 +44,9 @@ class page
     {
         ?>
         <div class="menu">
-            <div class="center">МЕНЮ</div>
+            <?php
+                $this->menu->show_menu();
+            ?>
         </div>
         <?php
     }
