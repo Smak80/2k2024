@@ -2,6 +2,7 @@
 
 require_once "common/page.php";
 require_once "common/a_content.php";
+require_once "common/db_helper.php";
 
 enum error_type: string{
     case INVALID_LOGIN = 'Некорректный логин';
@@ -34,6 +35,11 @@ class reg extends common\a_content{
             $this->error_type = error_type::INVALID_LOGIN;
         }
 
+        // TODO: Выполнить остальные проверки
+
+        $h_password = password_hash($password, PASSWORD_DEFAULT);
+
+        \common\db_helper::getInstance()->reg_user($login, $h_password);
 
 
     }
@@ -66,5 +72,5 @@ class reg extends common\a_content{
     }
 }
 
-new \common\page(new reg());
+new \common\page(new auth());
 ?>

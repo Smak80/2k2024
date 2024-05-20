@@ -6,6 +6,7 @@ use mysqli_sql_exception;
 
 enum tables: string{
     case MENU = 'menu';
+    case USER = 'users';
 }
 class db_helper
 {
@@ -23,16 +24,26 @@ class db_helper
         return self::$db;
     }
 
-    public function get_all_data(tables $table)
+    public function get_all_data(tables $table, array $conditioins = [])
     {
         try {
             $this->mysql->begin_transaction(name: "menu");
             // Имя таблицы не поддерживается в качестве параметра запроса.
             // Поэтому при создании запросов строковое значение
             // было изменено на перечисление
-            $stmt = $this->mysql->prepare("SELECT * FROM $table->value");
-//            if (!$stmt->bind_param('s', $table))
-//                throw new mysqli_sql_exception("Ошибка привязки параметра");
+            $c = "";
+            $amp = "";
+            foreach ($conditioins as $k => $v){
+                $c .= "$amp $k = ?";
+                $amp = " and";
+            }
+
+            $stmt = $this->mysql->prepare("SELECT * FROM $table->value WHERE $c");
+            foreach ($conditioins as $k => $v) {
+                if (!$stmt->bind_param('s', $v))
+                    throw new mysqli_sql_exception("Ошибка привязки параметра");
+            }
+
             if (!$stmt->execute())
                 throw new mysqli_sql_exception("Ошибка выполнения запроса");
             if (!$res = $stmt->get_result())
@@ -44,6 +55,24 @@ class db_helper
             print($e->getMessage());
             $this->mysql->rollback(name: "menu");
             return array();
+        }
+    }
+
+    public function reg_user($username, $password): bool{
+        try{
+            $this->mysql->begin_transaction(name: "user");
+            $t = tables::USER->value;
+            $stmt = $this->mysql->prepare("INSERT INTO $t (login, password) VALUES (?, ?)");
+            if (!$stmt->bind_param("ss", $username, $password))
+                throw new mysqli_sql_exception("Не удалось привязать значения параметров");
+            if (!$stmt->execute())
+                throw new mysqli_sql_exception("Ошибка выполнения запроса");
+            $this->mysql->commit(name: "user");
+            return true;
+        } catch (mysqli_sql_exception $e) {
+            print ($e->getMessage());
+            $this->mysql->rollback(name: "user");
+            return false;
         }
     }
 }
