@@ -24,22 +24,22 @@ class db_helper
         return self::$db;
     }
 
-    public function get_all_data(tables $table, array $conditioins = [])
+    public function get_all_data(tables $table, array $conditioins = []): array
     {
         try {
-            $this->mysql->begin_transaction(name: "menu");
+            $this->mysql->begin_transaction(name: "get_all");
             // Имя таблицы не поддерживается в качестве параметра запроса.
             // Поэтому при создании запросов строковое значение
             // было изменено на перечисление
-            $c = "";
+            $c = sizeof($conditioins) > 0 ? " WHERE " : "";
             $amp = "";
             foreach ($conditioins as $k => $v){
-                $c .= "$amp $k = ?";
-                $amp = " and";
+                $c .= "$amp$k = ?";
+                $amp = " and ";
             }
 
-            $stmt = $this->mysql->prepare("SELECT * FROM $table->value WHERE $c");
-            foreach ($conditioins as $k => $v) {
+            $stmt = $this->mysql->prepare("SELECT * FROM $table->value $c");
+            foreach ($conditioins as $v) {
                 if (!$stmt->bind_param('s', $v))
                     throw new mysqli_sql_exception("Ошибка привязки параметра");
             }
@@ -49,11 +49,11 @@ class db_helper
             if (!$res = $stmt->get_result())
                 throw new mysqli_sql_exception("Ошибка получения результатов запроса");
             $arr = $res->fetch_all(MYSQLI_ASSOC);
-            $this->mysql->commit(name: "menu");
+            $this->mysql->commit(name: "get_all");
             return $arr;
         } catch (mysqli_sql_exception $e) {
             print($e->getMessage());
-            $this->mysql->rollback(name: "menu");
+            $this->mysql->rollback(name: "get_all");
             return array();
         }
     }

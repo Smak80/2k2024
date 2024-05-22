@@ -17,6 +17,7 @@ class reg extends common\a_content{
 
     function __construct()
     {
+        parent::__construct();
         unset($this->error_type);
         if (
             !isset($_POST['login']) ||
@@ -67,10 +68,11 @@ class reg extends common\a_content{
                 </div>
                 <button type="submit">Зарегистрироваться</button>
             </form>
+            <a href="auth.php">Войти</a>
         </div>
         <?php
     }
 }
 
-new \common\page(new auth());
+new \common\page(new reg());
 ?>

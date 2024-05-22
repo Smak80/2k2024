@@ -5,6 +5,10 @@ require_once "common/a_content.php";
 
 class index extends common\a_content{
 
+    function __construct()
+    {
+        parent::__construct();
+    }
     function show_content()
     {
         ?>

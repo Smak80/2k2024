@@ -17,6 +17,10 @@ class auth extends common\a_content{
 
     function __construct()
     {
+        parent::__construct();
+        if (isset($_GET['exit'])){
+            unset($_SESSION['login']);
+        }
         unset($this->error_type);
         if (
             !isset($_POST['login']) ||
@@ -39,9 +43,10 @@ class auth extends common\a_content{
         print_r($data);
         print($data[0]['password']);
         if (password_verify($password, $data[0]['password'])){
-            print("OK");
+            $_SESSION['login'] = $login;
+            header('Location: second.php');
         } else {
-            print("INCORRECT");
+            $this->error_type = error_type::INVALID_PASSWORD;
         }
 
     }
@@ -65,6 +70,7 @@ class auth extends common\a_content{
                 </div>
                 <button type="submit">Войти</button>
             </form>
+            <a href="reg.php">Регистрация</a>
         </div>
         <?php
     }
